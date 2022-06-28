@@ -1,6 +1,11 @@
 import { useState } from "react";
 import { useQuery } from "react-query";
 
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import About from "./Pages/About";
+import Reviews from "./Pages/Reviews";
+import Home from "./Pages/Home";
+import Order from "./Pages/Order";
 import Item from "./Item/Item";
 import Cart from "./Cart/Cart";
 import Drawer from "@mui/material/Drawer";
@@ -68,27 +73,40 @@ function App() {
   if (isLoading) return <LinearProgress />;
   if (error) return <div>Something went wrong..</div>;
   return (
-    <Wrapper>
-      <Drawer anchor="right" open={cartOpen} onClose={() => setCartOpen(false)}>
-        <Cart
-          cartItems={cartItems}
-          addToCart={handleAddToCart}
-          removeFromCart={handleRemoveFromCart}
-        />
-      </Drawer>
-      <StyledButton onClick={() => setCartOpen(true)}>
-        <Badge badgeContent={getTotalItems(cartItems)} color="error">
-          <AddShoppinCartIcon />
-        </Badge>
-      </StyledButton>
-      <Grid container spacing={3}>
-        {data?.map((item) => (
-          <Grid item key={item.id} xs={12} sm={4}>
-            <Item item={item} handleAddToCart={handleAddToCart}></Item>
-          </Grid>
-        ))}
-      </Grid>
-    </Wrapper>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/reviews" element={<Reviews />} />
+        <Route path="/order" element={<Order />} />
+      </Routes>
+
+      <Wrapper>
+        <Drawer
+          anchor="right"
+          open={cartOpen}
+          onClose={() => setCartOpen(false)}
+        >
+          <Cart
+            cartItems={cartItems}
+            addToCart={handleAddToCart}
+            removeFromCart={handleRemoveFromCart}
+          />
+        </Drawer>
+        <StyledButton onClick={() => setCartOpen(true)}>
+          <Badge badgeContent={getTotalItems(cartItems)} color="error">
+            <AddShoppinCartIcon />
+          </Badge>
+        </StyledButton>
+        <Grid container spacing={3}>
+          {data?.map((item) => (
+            <Grid item key={item.id} xs={12} sm={4}>
+              <Item item={item} handleAddToCart={handleAddToCart}></Item>
+            </Grid>
+          ))}
+        </Grid>
+      </Wrapper>
+    </BrowserRouter>
   );
 }
 
